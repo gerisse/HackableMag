@@ -1,0 +1,23 @@
+
+
+mkdir -p PI/NetBSD
+cd PI/NetBSD
+
+export CVSROOT='anoncvs@anoncvs.NetBSD.org:/cvsroot"
+export CVSROOT="anoncvs@anoncvs.NetBSD.org:/cvsroot"
+export CVS_RSH="ssh"
+
+cvs checkout -r netbsd-9-2-RELEASE -P src
+
+./build.sh list-arch
+
+./build.sh -U -j10 -m evbarm -a earmv7hf tools
+
+./build.sh -u -U -j2 -m evbarm -a earmv7hf kernel=RPI2
+
+./build.sh -U -j10 -m evbarm -a earmv7hf tools
+
+gunzip armv7.img.gz
+
+sudo dd if=armv7.img.gz of= bs=1M conv=sync
+
